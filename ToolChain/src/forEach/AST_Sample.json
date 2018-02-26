@@ -1,0 +1,519 @@
+Reading Map_reduce_filter_to_iterative.js
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "VariableDeclaration",
+            "declarations": [
+                {
+                    "type": "VariableDeclarator",
+                    "id": {
+                        "type": "Identifier",
+                        "name": "planetSize"
+                    },
+                    "init": {
+                        "type": "ArrayExpression",
+                        "elements": [
+                            {
+                                "type": "Literal",
+                                "value": 320,
+                                "raw": "320"
+                            },
+                            {
+                                "type": "Literal",
+                                "value": 133,
+                                "raw": "133"
+                            },
+                            {
+                                "type": "Literal",
+                                "value": 540,
+                                "raw": "540"
+                            },
+                            {
+                                "type": "Literal",
+                                "value": 170,
+                                "raw": "170"
+                            },
+                            {
+                                "type": "Literal",
+                                "value": 181,
+                                "raw": "181"
+                            },
+                            {
+                                "type": "Literal",
+                                "value": 192,
+                                "raw": "192"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "kind": "var"
+        },
+        {
+            "type": "FunctionDeclaration",
+            "id": {
+                "type": "Identifier",
+                "name": "checkifPlanet"
+            },
+            "params": [
+                {
+                    "type": "Identifier",
+                    "name": "planets"
+                }
+            ],
+            "body": {
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "type": "ReturnStatement",
+                        "argument": {
+                            "type": "BinaryExpression",
+                            "operator": ">=",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "planets"
+                            },
+                            "right": {
+                                "type": "Literal",
+                                "value": 190,
+                                "raw": "190"
+                            }
+                        }
+                    }
+                ]
+            },
+            "generator": false,
+            "expression": false,
+            "async": false
+        },
+        {
+            "type": "VariableDeclaration",
+            "declarations": [
+                {
+                    "type": "VariableDeclarator",
+                    "id": {
+                        "type": "Identifier",
+                        "name": "filterFuntionBody"
+                    },
+                    "init": {
+                        "type": "Literal",
+                        "value": null,
+                        "raw": "null"
+                    }
+                }
+            ],
+            "kind": "var"
+        },
+        {
+            "type": "FunctionDeclaration",
+            "id": {
+                "type": "Identifier",
+                "name": "myFilterFunction"
+            },
+            "params": [],
+            "body": {
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "type": "VariableDeclaration",
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "newSystem"
+                                },
+                                "init": {
+                                    "type": "CallExpression",
+                                    "callee": {
+                                        "type": "MemberExpression",
+                                        "computed": false,
+                                        "object": {
+                                            "type": "Identifier",
+                                            "name": "planetSize"
+                                        },
+                                        "property": {
+                                            "type": "Identifier",
+                                            "name": "filter"
+                                        }
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "checkifPlanet"
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "kind": "var"
+                    },
+                    {
+                        "type": "VariableDeclaration",
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "reCheck"
+                                },
+                                "init": {
+                                    "type": "CallExpression",
+                                    "callee": {
+                                        "type": "MemberExpression",
+                                        "computed": false,
+                                        "object": {
+                                            "type": "Identifier",
+                                            "name": "planetSize"
+                                        },
+                                        "property": {
+                                            "type": "Identifier",
+                                            "name": "filter"
+                                        }
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "FunctionExpression",
+                                            "id": null,
+                                            "params": [
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "pl"
+                                                }
+                                            ],
+                                            "body": {
+                                                "type": "BlockStatement",
+                                                "body": [
+                                                    {
+                                                        "type": "VariableDeclaration",
+                                                        "declarations": [
+                                                            {
+                                                                "type": "VariableDeclarator",
+                                                                "id": {
+                                                                    "type": "Identifier",
+                                                                    "name": "changeval"
+                                                                },
+                                                                "init": {
+                                                                    "type": "BinaryExpression",
+                                                                    "operator": "+",
+                                                                    "left": {
+                                                                        "type": "Identifier",
+                                                                        "name": "pl"
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "Literal",
+                                                                        "value": 20,
+                                                                        "raw": "20"
+                                                                    }
+                                                                }
+                                                            }
+                                                        ],
+                                                        "kind": "var"
+                                                    },
+                                                    {
+                                                        "type": "ReturnStatement",
+                                                        "argument": {
+                                                            "type": "BinaryExpression",
+                                                            "operator": ">",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "changeval"
+                                                            },
+                                                            "right": {
+                                                                "type": "Literal",
+                                                                "value": 189,
+                                                                "raw": "189"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "generator": false,
+                                            "expression": false,
+                                            "async": false
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "kind": "var"
+                    },
+                    {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "type": "MemberExpression",
+                                "computed": false,
+                                "object": {
+                                    "type": "Identifier",
+                                    "name": "console"
+                                },
+                                "property": {
+                                    "type": "Identifier",
+                                    "name": "log"
+                                }
+                            },
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "reCheck"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "generator": false,
+            "expression": false,
+            "async": false
+        },
+        {
+            "type": "FunctionDeclaration",
+            "id": {
+                "type": "Identifier",
+                "name": "iterativeFor"
+            },
+            "params": [],
+            "body": {
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "type": "VariableDeclaration",
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "newSystem"
+                                },
+                                "init": {
+                                    "type": "ArrayExpression",
+                                    "elements": []
+                                }
+                            }
+                        ],
+                        "kind": "var"
+                    },
+                    {
+                        "type": "VariableDeclaration",
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "counter"
+                                },
+                                "init": {
+                                    "type": "Literal",
+                                    "value": 0,
+                                    "raw": "0"
+                                }
+                            }
+                        ],
+                        "kind": "var"
+                    },
+                    {
+                        "type": "ForStatement",
+                        "init": {
+                            "type": "VariableDeclaration",
+                            "declarations": [
+                                {
+                                    "type": "VariableDeclarator",
+                                    "id": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "init": {
+                                        "type": "Literal",
+                                        "value": 0,
+                                        "raw": "0"
+                                    }
+                                }
+                            ],
+                            "kind": "var"
+                        },
+                        "test": {
+                            "type": "BinaryExpression",
+                            "operator": "<",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "i"
+                            },
+                            "right": {
+                                "type": "MemberExpression",
+                                "computed": false,
+                                "object": {
+                                    "type": "Identifier",
+                                    "name": "planetSize"
+                                },
+                                "property": {
+                                    "type": "Identifier",
+                                    "name": "length"
+                                }
+                            }
+                        },
+                        "update": {
+                            "type": "UpdateExpression",
+                            "operator": "++",
+                            "argument": {
+                                "type": "Identifier",
+                                "name": "i"
+                            },
+                            "prefix": false
+                        },
+                        "body": {
+                            "type": "BlockStatement",
+                            "body": [
+                                {
+                                    "type": "VariableDeclaration",
+                                    "declarations": [
+                                        {
+                                            "type": "VariableDeclarator",
+                                            "id": {
+                                                "type": "Identifier",
+                                                "name": "pl"
+                                            },
+                                            "init": {
+                                                "type": "MemberExpression",
+                                                "computed": true,
+                                                "object": {
+                                                    "type": "Identifier",
+                                                    "name": "planetSize"
+                                                },
+                                                "property": {
+                                                    "type": "Identifier",
+                                                    "name": "i"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "kind": "var"
+                                },
+                                {
+                                    "type": "IfStatement",
+                                    "test": {
+                                        "type": "BinaryExpression",
+                                        "operator": ">",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "pl"
+                                        },
+                                        "right": {
+                                            "type": "Literal",
+                                            "value": 171,
+                                            "raw": "171"
+                                        }
+                                    },
+                                    "consequent": {
+                                        "type": "BlockStatement",
+                                        "body": [
+                                            {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "AssignmentExpression",
+                                                    "operator": "=",
+                                                    "left": {
+                                                        "type": "MemberExpression",
+                                                        "computed": true,
+                                                        "object": {
+                                                            "type": "Identifier",
+                                                            "name": "newSystem"
+                                                        },
+                                                        "property": {
+                                                            "type": "Identifier",
+                                                            "name": "counter"
+                                                        }
+                                                    },
+                                                    "right": {
+                                                        "type": "MemberExpression",
+                                                        "computed": true,
+                                                        "object": {
+                                                            "type": "Identifier",
+                                                            "name": "planetSize"
+                                                        },
+                                                        "property": {
+                                                            "type": "Identifier",
+                                                            "name": "i"
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "UpdateExpression",
+                                                    "operator": "++",
+                                                    "argument": {
+                                                        "type": "Identifier",
+                                                        "name": "counter"
+                                                    },
+                                                    "prefix": false
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "alternate": null
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "type": "MemberExpression",
+                                "computed": false,
+                                "object": {
+                                    "type": "Identifier",
+                                    "name": "console"
+                                },
+                                "property": {
+                                    "type": "Identifier",
+                                    "name": "log"
+                                }
+                            },
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "newSystem"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "generator": false,
+            "expression": false,
+            "async": false
+        },
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "CallExpression",
+                "callee": {
+                    "type": "Identifier",
+                    "name": "myFilterFunction"
+                },
+                "arguments": []
+            }
+        },
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "CallExpression",
+                "callee": {
+                    "type": "Identifier",
+                    "name": "iterativeFor"
+                },
+                "arguments": []
+            }
+        }
+    ],
+    "sourceType": "script"
+}
+Is using a  filter operation.
+Is using a  filter operation.
+Done
