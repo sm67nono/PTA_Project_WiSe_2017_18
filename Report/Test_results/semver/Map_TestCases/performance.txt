@@ -1,0 +1,5 @@
+Original
+Time taken for 10 Test iterations  82170.210 milliseconds
+
+Refactored
+Time taken for 10 Test iterations  80105.461 milliseconds

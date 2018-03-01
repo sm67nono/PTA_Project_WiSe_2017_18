@@ -1,0 +1,6 @@
+Original
+Time taken for 10 TestSuite iterations  54568.561 milliseconds
+
+Refactored
+
+Time taken for 10 TestSuite iterations  54201.679 milliseconds
