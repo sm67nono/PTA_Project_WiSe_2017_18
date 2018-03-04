@@ -819,19 +819,17 @@ Range.prototype.parseRange = function(range) {
     return parseComparator(comp, loose);
   }).join(' ').split(/\s+/);
   if (this.loose) {
-    // in loose mode, throw out any that are not valid comparators
+        ;
         var arrayUsingItr = set;
         var newArray = [];
-        var arg = null;
-        var counter = 0;
-        for (var i = 0; i < arrayUsingItr.length; i++) {
+        for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
             var comp = arrayUsingItr[i];
             if (!!comp.match(compRe)) {
                 newArray[counter] = arrayUsingItr[i];
                 counter++;
             }
         }
-  }
+    }
   set = set.map(function(comp) {
     return new Comparator(comp, loose);
   });

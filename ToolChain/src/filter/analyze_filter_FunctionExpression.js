@@ -64,6 +64,7 @@ module.exports = {
             if(node.callee.object)
             {
               arrayOperatedOn=node.callee.object;
+              console.log(escodg.generate(arrayOperatedOn));
             }
             if(node.arguments[0].params)
             {
@@ -273,27 +274,6 @@ estraverse.traverse(ast, {
 
       }
 
-      //Important for positioning the Converted Code
-      if(checkNode.type==='IfStatement')
-      {
-
-        if(checkNode.consequent)
-        {
-
-          if(checkNode.consequent.body)
-          {
-
-            checkNodeBody=checkNode.consequent.body;
-          }
-          else {
-              checkNodeBody=checkNode.consequent;
-          }
-        }
-
-      }
-
-
-
 
       estraverse.traverse(checkNode, {
           enter: function(nodelvl2,parent2){
@@ -426,6 +406,80 @@ estraverse.traverse(ast, {
             //Prints out Filter functions
             if(typeOfOp=='filter')
             {
+
+              if(checkNode.type==='IfStatement')
+              {
+                    var checkConsequent=checkNode.consequent;
+                    var checkAlternate=checkNode.alternate;
+                  if(checkConsequent){
+                  estraverse.traverse(checkConsequent, {
+                    enter: function(nodelvl5,par){
+                        if(nodelvl2.type=="CallExpression")
+                        {
+                        //console.log(JSON.stringify(currentfunctionAST,null,4));
+
+                        var typeOfOp='';
+                        if(nodelvl2.callee)
+                        {
+                          if(nodelvl2.callee.property)
+                          {
+                            typeOfOp=nodelvl2.callee.property.name;
+                          }
+                        }
+                        //Prints out Filter functions
+                        if(typeOfOp=='filter')
+                        {
+                          console.log("Found in consequent");
+                          if(checkNode.consequent){
+                            if(checkNode.consequent.body)
+                            {
+                              checkNodeBody=checkNode.consequent.body;
+
+                              }
+                            }
+                          this.break();
+
+
+                        }
+
+
+                    }}});
+                  }
+                    if(checkAlternate){
+
+                    estraverse.traverse(checkAlternate, {
+                      enter: function(nodelvl5,par){
+                          if(nodelvl2.type=="CallExpression")
+                          {
+                          //console.log(JSON.stringify(currentfunctionAST,null,4));
+
+                          var typeOfOp='';
+                          if(nodelvl2.callee)
+                          {
+                            if(nodelvl2.callee.property)
+                            {
+                              typeOfOp=nodelvl2.callee.property.name;
+                            }
+                          }
+                          //Prints out Filter functions
+                          if(typeOfOp=='filter')
+                          {
+                            console.log("Found in alternate");
+                            if(checkNode.alternate){
+                              if(checkNode.alternate.body)
+                              {
+                                checkNodeBody=checkNode.alternate.body;
+
+                                }
+                              }
+                            this.break();
+
+                          }
+
+
+                      }}});
+                    }
+            }
               //console.log(dataStore[getFromTemplateStore].parentSignature);
               if(dataStore[getFromTemplateStore]){
                 if(parent2==dataStore[getFromTemplateStore].parentSignature)
@@ -562,6 +616,67 @@ estraverse.traverse(ast, {
 
 });
 //console.log(JSON.stringify(ast,null,4));
+
+function postProcess_CleanUp(ast)
+{
+        estraverse.replace(ast, {
+          enter: function(node,parentNode){
+            if(node.type)
+            {
+            if(node.type==="ExpressionStatement")
+            {
+                if(node.expression)
+                {
+                  if(node.expression.type==="CallExpression")
+                  {
+                    if(node.expression.arguments[0])
+                    {
+                         if(node.expression.arguments[0].type)
+                          {
+                              if(node.expression.arguments[0].type=="Identifier" && node.expression.arguments[0].name=="newArray")
+                              {
+                                //Clear values
+                                //console.log("Before");
+                                //console.log(escodg.generate(node));
+                                for (var key in node )
+                                {
+                                    node[key] = null;
+                                }
+
+                                node.type="Identifier";
+                                node.name="";
+
+                              }
+                          }
+                      }
+                  }
+                }
+            }
+            if(node.type==="AssignmentExpression")
+            {
+
+
+                if(node.right){
+
+                if(node.right.type==="Identifier" && node.right.name==="newArray")
+               {
+                 for (var key in node)
+                 {
+                  node[key] = null;
+                }
+
+                node.type="Identifier";
+                node.name="";
+              }
+            }
+
+            }
+          }
+        }
+       });
+  }
+
+postProcess_CleanUp(ast);
 var newCode = escodg.generate(ast);
 
 return newCode;

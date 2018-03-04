@@ -139,16 +139,17 @@ function Argv(processArgs, cwd) {
         fn(self.help());
     };
     self.help = function () {
-        var arrayUsingItr = Object.keys(descriptions).concat(Object.keys(demanded)).concat(Object.keys(options.default));
-        var accumulator = null;
-        var arg = null;
-        for (var i = 0; i < arrayUsingItr.length; i++) {
-            var key = arrayUsingItr[i];
-            if (key !== '_')
-                acc[key] = true;
-            accumulator = acc;
-        }
-        var keys = Object.keys(accumulator);
+        self.help = function () {
+        var keys = Object.keys(
+            Object.keys(descriptions)
+            .concat(Object.keys(demanded))
+            .concat(Object.keys(options.default))
+            .reduce(function (acc, key) {
+                if (key !== '_') acc[key] = true;
+                return acc;
+            }, {})
+        );
+		
         var help = keys.length ? ['Options:'] : [];
         if (usage) {
             help.unshift(usage.replace(/\$0/g, self.$0), '');

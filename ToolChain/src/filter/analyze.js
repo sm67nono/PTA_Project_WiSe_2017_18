@@ -15,12 +15,11 @@ var filename = process.argv[2];
 console.log('Reading ' + filename);
 var code = fs.readFileSync(filename, 'utf-8');
 
+var output_Pipeline_1 = module_Function.analyzeFilterFunctionCode(code);
 
-var output_Pipeline_3= module_FunctionExpression.analyzeFilterFunctionExpressionCode(code);
+var output_Pipeline_3= module_FunctionExpression.analyzeFilterFunctionExpressionCode(output_Pipeline_1);
 
-var output_Pipeline_1 = module_Function.analyzeFilterFunctionCode(output_Pipeline_3);
-
-var output_Pipeline_2 = module_Root.analyzeFilterRootCode(output_Pipeline_1);
+var output_Pipeline_2 = module_Root.analyzeFilterRootCode(output_Pipeline_3);
 
 
 

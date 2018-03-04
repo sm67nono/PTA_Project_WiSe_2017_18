@@ -5,7 +5,6 @@ var assert = require("assert")
 var path = require("path")
 var fs = require("fs")
 var glob = require("glob")
-var _0666 = parseInt('666', 8)
 
 var defaultGlobOpts = {
   nosort: true,
@@ -26,7 +25,7 @@ function defaults (options) {
     'rmdir',
     'readdir'
   ]
-  var k=methods.forEach(function(m) {
+  methods.forEach(function(m) {
     options[m] = options[m] || fs[m]
     m = m + 'Sync'
     options[m] = options[m] || fs[m]
@@ -49,9 +48,9 @@ function rimraf (p, options, cb) {
 
   assert(p, 'rimraf: missing path')
   assert.equal(typeof p, 'string', 'rimraf: path should be a string')
-  assert.equal(typeof cb, 'function', 'rimraf: callback function required')
-  assert(options, 'rimraf: invalid options argument provided')
+  assert(options, 'rimraf: missing options')
   assert.equal(typeof options, 'object', 'rimraf: options should be object')
+  assert.equal(typeof cb, 'function', 'rimraf: callback function required')
 
   defaults(options)
 
@@ -62,7 +61,7 @@ function rimraf (p, options, cb) {
   if (options.disableGlob || !glob.hasMagic(p))
     return afterGlob(null, [p])
 
-  options.lstat(p, function (er, stat) {
+  fs.lstat(p, function (er, stat) {
     if (!er)
       return afterGlob(null, [p])
 
@@ -83,10 +82,10 @@ function rimraf (p, options, cb) {
     if (n === 0)
       return cb()
 
-    var t=results.forEach(function (p) {
+    results.forEach(function (p) {
       rimraf_(p, options, function CB (er) {
         if (er) {
-          if ((er.code === "EBUSY" || er.code === "ENOTEMPTY" || er.code === "EPERM") &&
+          if (isWindows && (er.code === "EBUSY" || er.code === "ENOTEMPTY" || er.code === "EPERM") &&
               busyTries < options.maxBusyTries) {
             busyTries ++
             var time = busyTries * 100
@@ -136,10 +135,6 @@ function rimraf_ (p, options, cb) {
     if (er && er.code === "ENOENT")
       return cb(null)
 
-    // Windows can EPERM on stat.  Life is suffering.
-    if (er && er.code === "EPERM" && isWindows)
-      fixWinEPERM(p, options, er, cb)
-
     if (st && st.isDirectory())
       return rmdir(p, options, er, cb)
 
@@ -166,7 +161,7 @@ function fixWinEPERM (p, options, er, cb) {
   if (er)
     assert(er instanceof Error)
 
-  options.chmod(p, _0666, function (er2) {
+  options.chmod(p, 666, function (er2) {
     if (er2)
       cb(er2.code === "ENOENT" ? null : er)
     else
@@ -188,7 +183,7 @@ function fixWinEPERMSync (p, options, er) {
     assert(er instanceof Error)
 
   try {
-    options.chmodSync(p, _0666)
+    options.chmodSync(p, 666)
   } catch (er2) {
     if (er2.code === "ENOENT")
       return
@@ -243,7 +238,7 @@ function rmkids(p, options, cb) {
     if (n === 0)
       return options.rmdir(p, cb)
     var errState
-    var f=files.forEach(function (f) {
+    files.forEach(function (f) {
       rimraf(path.join(p, f), options, function (er) {
         if (errState)
           return
@@ -274,7 +269,7 @@ function rimrafSync (p, options) {
     results = [p]
   } else {
     try {
-      options.lstatSync(p)
+      fs.lstatSync(p)
       results = [p]
     } catch (er) {
       results = glob.sync(p, options.glob)
@@ -292,10 +287,6 @@ function rimrafSync (p, options) {
     } catch (er) {
       if (er.code === "ENOENT")
         return
-
-      // Windows can EPERM on stat.  Life is suffering.
-      if (er.code === "EPERM" && isWindows)
-        fixWinEPERMSync(p, options, er)
     }
 
     try {
@@ -311,7 +302,6 @@ function rimrafSync (p, options) {
         return isWindows ? fixWinEPERMSync(p, options, er) : rmdirSync(p, options, er)
       if (er.code !== "EISDIR")
         throw er
-
       rmdirSync(p, options, er)
     }
   }
@@ -338,27 +328,8 @@ function rmdirSync (p, options, originalEr) {
 function rmkidsSync (p, options) {
   assert(p)
   assert(options)
-  var n=options.readdirSync(p).forEach(function (f) {
+  options.readdirSync(p).forEach(function (f) {
     rimrafSync(path.join(p, f), options)
   })
-
-  // We only end up here once we got ENOTEMPTY at least once, and
-  // at this point, we are guaranteed to have removed all the kids.
-  // So, we know that it won't be ENOENT or ENOTDIR or anything else.
-  // try really hard to delete stuff on windows, because it has a
-  // PROFOUNDLY annoying habit of not closing handles promptly when
-  // files are deleted, resulting in spurious ENOTEMPTY errors.
-  var retries = isWindows ? 100 : 1
-  var i = 0
-  do {
-    var threw = true
-    try {
-      var ret = options.rmdirSync(p, options)
-      threw = false
-      return ret
-    } finally {
-      if (++i < retries && threw)
-        continue
-    }
-  } while (true)
+  options.rmdirSync(p, options)
 }

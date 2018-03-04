@@ -763,13 +763,11 @@ function Range(range, loose) {
 
   this.loose = loose;
 
-  // First, split based on boolean or ||
   this.raw = range;
- var arrayUsingItr2 = range.split(/\s*\|\|\s*/);
+ this.raw = range;
+    var arrayUsingItr2 = range.split(/\s*\|\|\s*/);
     var newArray2 = [];
-    var arg2 = null;
-    var counter2 = 0;
-    for (var i2 = 0; i2 < arrayUsingItr2.length; i2++) {
+    for (var i2 = 0, counter2 = 0; i2 < arrayUsingItr2.length; i2++) {
         var range = arrayUsingItr2[i2];
         newArray2[counter2] = this.parseRange(range.trim());
         counter2++;
@@ -786,11 +784,9 @@ function Range(range, loose) {
 }
 
 Range.prototype.format = function() {
-	var arrayUsingItr = this.set;
+	 var arrayUsingItr = this.set;
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i < arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
         var comps = arrayUsingItr[i];
         newArray[counter] = comps.join(' ').trim();
         counter++;
@@ -803,61 +799,42 @@ Range.prototype.toString = function() {
   return this.range;
 };
 
-Range.prototype.parseRange = function(range) {
-  var loose = this.loose;
-  range = range.trim();
-  debug('range', range, loose);
-  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-  var hr = loose ? re[HYPHENRANGELOOSE] : re[HYPHENRANGE];
-  range = range.replace(hr, hyphenReplace);
-  debug('hyphen replace', range);
-  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-  range = range.replace(re[COMPARATORTRIM], comparatorTrimReplace);
-  debug('comparator trim', range, re[COMPARATORTRIM]);
-
-  // `~ 1.2.3` => `~1.2.3`
-  range = range.replace(re[TILDETRIM], tildeTrimReplace);
-
-  // `^ 1.2.3` => `^1.2.3`
-  range = range.replace(re[CARETTRIM], caretTrimReplace);
-
-  // normalize spaces
-  range = range.split(/\s+/).join(' ');
-
-  // At this point, the range is completely trimmed and
-  // ready to be split into comparators.
-
-  var compRe = loose ? re[COMPARATORLOOSE] : re[COMPARATOR];
-  var arrayUsingItr = range.split(' ');
+Range.prototype.parseRange = function(range){
+	var loose = this.loose;
+    range = range.trim();
+    debug('range', range, loose);
+    var hr = loose ? re[HYPHENRANGELOOSE] : re[HYPHENRANGE];
+    range = range.replace(hr, hyphenReplace);
+    debug('hyphen replace', range);
+    range = range.replace(re[COMPARATORTRIM], comparatorTrimReplace);
+    debug('comparator trim', range, re[COMPARATORTRIM]);
+    range = range.replace(re[TILDETRIM], tildeTrimReplace);
+    range = range.replace(re[CARETTRIM], caretTrimReplace);
+    range = range.split(/\s+/).join(' ');
+    var compRe = loose ? re[COMPARATORLOOSE] : re[COMPARATOR];
+    var arrayUsingItr = range.split(' ');
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i < arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
         var comp = arrayUsingItr[i];
         newArray[counter] = parseComparator(comp, loose);
         counter++;
     }
     var set = newArray.join(' ').split(/\s+/);
-  if (this.loose) {
-    // in loose mode, throw out any that are not valid comparators
-    set = set.filter(function(comp) {
-      return !!comp.match(compRe);
-    });
-  }
-   var arrayUsingItr = set;
+    if (this.loose) {
+        set = set.filter(function (comp) {
+            return !!comp.match(compRe);
+        });
+    }
+    var arrayUsingItr = set;
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i < arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
         var comp = arrayUsingItr[i];
         newArray[counter] = new Comparator(comp, loose);
         counter++;
     }
     set = newArray;
-
-  return set;
+    return set;
 };
-
 Range.prototype.intersects = function(range, loose) {
   if (!(range instanceof Range)) {
     throw new TypeError('a Range is required');
@@ -876,17 +853,14 @@ Range.prototype.intersects = function(range, loose) {
 
 // Mostly just for testing and legacy API reasons
 exports.toComparators = toComparators;
-function toComparators(range, loose) { var arrayUsingItr2 = new Range(range, loose).set;
+function toComparators(range, loose) { 
+ var arrayUsingItr2 = new Range(range, loose).set;
     var newArray2 = [];
-    var arg2 = null;
-    var counter2 = 0;
-    for (var i2 = 0; i2 < arrayUsingItr2.length; i2++) {
+    for (var i2 = 0, counter2 = 0; i2 < arrayUsingItr2.length; i2++) {
         var comp = arrayUsingItr2[i2];
         var arrayUsingItr = comp;
         var newArray = [];
-        var arg = null;
-        var counter = 0;
-        for (var i = 0; i < arrayUsingItr.length; i++) {
+        for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
             var c = arrayUsingItr[i];
             newArray[counter] = c.value;
             counter++;
@@ -924,11 +898,9 @@ function isX(id) {
 // ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
 // ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
 function replaceTildes(comp, loose) {
- var arrayUsingItr2 = comp.trim().split(/\s+/);
+  var arrayUsingItr2 = comp.trim().split(/\s+/);
     var newArray2 = [];
-    var arg2 = null;
-    var counter2 = 0;
-    for (var i2 = 0; i2 < arrayUsingItr2.length; i2++) {
+    for (var i2 = 0, counter2 = 0; i2 < arrayUsingItr2.length; i2++) {
         var comp = arrayUsingItr2[i2];
         newArray2[counter2] = replaceTilde(comp, loose);
         counter2++;
@@ -974,9 +946,7 @@ function replaceTilde(comp, loose) {
 function replaceCarets(comp, loose) {
 	 var arrayUsingItr2 = comp.trim().split(/\s+/);
     var newArray2 = [];
-    var arg2 = null;
-    var counter2 = 0;
-    for (var i2 = 0; i2 < arrayUsingItr2.length; i2++) {
+    for (var i2 = 0, counter2 = 0; i2 < arrayUsingItr2.length; i2++) {
         var comp = arrayUsingItr2[i2];
         newArray2[counter2] = replaceCaret(comp, loose);
         counter2++;
@@ -1037,9 +1007,7 @@ function replaceXRanges(comp, loose){
     debug('replaceXRanges', comp, loose);
     var arrayUsingItr2 = comp.split(/\s+/);
     var newArray2 = [];
-    var arg2 = null;
-    var counter2 = 0;
-    for (var i2 = 0; i2 < arrayUsingItr2.length; i2++) {
+    for (var i2 = 0, counter2 = 0; i2 < arrayUsingItr2.length; i2++) {
         var comp = arrayUsingItr2[i2];
         newArray2[counter2] = replaceXRange(comp, loose);
         counter2++;

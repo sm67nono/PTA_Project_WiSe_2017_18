@@ -16,7 +16,6 @@ console.log('Reading ' + filename);
 var code = fs.readFileSync(filename, 'utf-8');
 
 var output_Pipeline_3 = module_FunctionExp.analyzeMapFunctionExpressionCode(code);
-
 var output_Pipeline_1 = module_Function.analyzeMapFunctionCode(output_Pipeline_3);
 
 var output_Pipeline_2 = module_Root.analyzeMapRootCode(output_Pipeline_1);

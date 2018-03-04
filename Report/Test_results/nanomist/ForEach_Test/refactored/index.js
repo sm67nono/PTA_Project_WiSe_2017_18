@@ -10,9 +10,15 @@ module.exports = function (args, opts) {
     if (typeof opts['boolean'] === 'boolean' && opts['boolean']) {
       flags.allBools = true;
     } else {
-      [].concat(opts['boolean']).filter(Boolean).forEach(function (key) {
-          flags.bools[key] = true;
-      });
+      ;
+        var arrayUsingItr = [].concat(opts['boolean']).filter(Boolean);
+        var newArray = [];
+        for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
+            var key = arrayUsingItr[i];
+            flags.bools[key] = true;
+            newArray[counter] = arrayUsingItr[i];
+            counter++;
+        }
     }
     
     var aliases = {};
@@ -25,11 +31,9 @@ module.exports = function (args, opts) {
         });
     });
 
-     var arrayUsingItr = [].concat(opts.string).filter(Boolean);
+    var arrayUsingItr = [].concat(opts.string).filter(Boolean);
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i < arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
         var key = arrayUsingItr[i];
         flags.strings[key] = true;
         if (aliases[key]) {
@@ -38,21 +42,18 @@ module.exports = function (args, opts) {
         newArray[counter] = arrayUsingItr[i];
         counter++;
     }
-    //[].concat(opts.string).filter(newArray);
     ;
     var defaults = opts['default'] || {};
     var argv = { _: [] };
     var arrayUsingItr = Object.keys(flags.bools);
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i < arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
         var key = arrayUsingItr[i];
         setArg(key, defaults[key] === undefined ? false : defaults[key]);
         newArray[counter] = arrayUsingItr[i];
         counter++;
     }
-    //Object.keys(newArray);
+    ;
     
     var notFlags = [];
 
@@ -83,10 +84,17 @@ module.exports = function (args, opts) {
 
     function setKey (obj, keys, value) {
         var o = obj;
-        keys.slice(0,-1).forEach(function (key) {
-            if (o[key] === undefined) o[key] = {};
+        var arrayUsingItr = keys.slice(0, -1);
+        var newArray = [];
+        for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
+            var key = arrayUsingItr[i];
+            if (o[key] === undefined)
+                o[key] = {};
             o = o[key];
-        });
+            newArray[counter] = arrayUsingItr[i];
+            counter++;
+        }
+        ;
 
         var key = keys[keys.length - 1];
         if (o[key] === undefined || flags.bools[key] || typeof o[key] === 'boolean') {
@@ -208,11 +216,9 @@ module.exports = function (args, opts) {
         }
     }
     
-   var arrayUsingItr = Object.keys(defaults);
+    var arrayUsingItr = Object.keys(defaults);
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i < arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
         var key = arrayUsingItr[i];
         if (!hasKey(argv, key.split('.'))) {
             setKey(argv, key.split('.'), defaults[key]);
@@ -223,20 +229,19 @@ module.exports = function (args, opts) {
         newArray[counter] = arrayUsingItr[i];
         counter++;
     }
-    Object.keys(newArray);
+    ;
     
     if (opts['--']) {
         argv['--'] = new Array();
-        var arrayUsingItr = notFlags;
+		var arrayUsingItr = notFlags;
         var newArray = [];
-        var arg = null;
-        var counter = 0;
-        for (var i = 0; i < arrayUsingItr.length; i++) {
+        for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
             var key = arrayUsingItr[i];
             argv['--'].push(key);
             newArray[counter] = arrayUsingItr[i];
             counter++;
         }
+    ;
     }
     else {
         notFlags.forEach(function(key) {
@@ -251,15 +256,13 @@ function hasKey (obj, keys) {
     var o = obj;
     var arrayUsingItr = keys.slice(0, -1);
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i < arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i < arrayUsingItr.length; i++) {
         var key = arrayUsingItr[i];
         o = o[key] || {};
         newArray[counter] = arrayUsingItr[i];
         counter++;
     }
-
+    ;
     var key = keys[keys.length - 1];
     return key in o;
 }

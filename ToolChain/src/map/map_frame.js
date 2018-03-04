@@ -3,9 +3,7 @@ var arrayUsingItr=null;
 //New array that would be created after filter
 var newArray=[];
 //Arguments to the filter function
-var arg=null;
-var counter=0;
-for(var i=0;i<arrayUsingItr.length;i++)
+for(var i=0,counter=0;i<arrayUsingItr.length;i++)
 {
   //val replaced by the name of the variable used in functional args
   var val=arrayUsingItr[i];
