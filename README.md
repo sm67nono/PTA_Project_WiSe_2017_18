@@ -18,6 +18,6 @@ Folder Structure and Description
                4) Consolidated Report.
                
 3. ToolChain/src:
-      Contents 1) Seperate modules for refactoring.
+      Contents 1) Seperate modules for refactoring. 
                2) A readMe for using the tool.
 
