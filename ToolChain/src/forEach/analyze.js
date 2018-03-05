@@ -19,7 +19,7 @@ var code = fs.readFileSync(filename, 'utf-8');
 var output_Pipeline_1 = module_Function.analyzeForEachFunctionCode(code);
 //2. Second we convert the forEach in FunctionExpressions into Iterative
 var output_Pipeline_3 = module_FunctionExpression.analyzeForEachFunctionExpressionCode(output_Pipeline_1);
-//2. Lastöly we convert the forEach inside Root of the program to Iterative
+//3. Lastly we convert the forEach inside Root of the program to Iterative
 var output_Pipeline_2 = module_Root.analyzeForEachRootCode(output_Pipeline_3);
 
 

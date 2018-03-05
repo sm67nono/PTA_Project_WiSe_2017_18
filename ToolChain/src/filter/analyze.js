@@ -1,4 +1,6 @@
-
+/*
+Responsible for order of Execution of the modules. The module carries out the following task:
+*/
 var fs = require('fs');
 var module_Function = require('./analyze_Filter_Functions');
 var module_FunctionExpression=require('./analyze_Filter_FunctionExpression');
@@ -14,11 +16,11 @@ if (process.argv.length < 3) {
 var filename = process.argv[2];
 console.log('Reading ' + filename);
 var code = fs.readFileSync(filename, 'utf-8');
-
+//1. First we convert the filter inside functions to Iterative
 var output_Pipeline_1 = module_Function.analyzeFilterFunctionCode(code);
-
+//2. Second we convert the filter in FunctionExpressions into Iterative
 var output_Pipeline_3= module_FunctionExpression.analyzeFilterFunctionExpressionCode(output_Pipeline_1);
-
+//3. Lastly we convert the filter inside Root of the program to Iterative
 var output_Pipeline_2 = module_Root.analyzeFilterRootCode(output_Pipeline_3);
 
 
@@ -29,10 +31,3 @@ fs.writeFile('Refactored/Refactored_itrerativeFilter.js', output_Pipeline_2, fun
   if (err) throw err;
   console.log('Saved!');
 });
-
-
-//1. First we convert the filter_Functions inside functions to Iterative
-
-
-
-//2. First we convert the filter_Functions inside Root of the program to Iterative

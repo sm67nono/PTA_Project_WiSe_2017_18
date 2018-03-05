@@ -1,11 +1,23 @@
 
+//Static Analysis  Here : smanna Dec 8, 2017
 
-//Static Analysis calls Here : smanna Dec 8, 2017
+/*
+This module is responsible of Pattern Detection of map in Program Root. The module carries out the following task:
+
+1) Detect the main Program Body for map patterns.
+2) If detected add to to the dataStore the extracted Values.
+3) Manufacture from a template an iterative form of the current functional Pattern.
+4) Add it to the List.
+5) Substitute the values into the AST after checking for patterns if it matches parent signature and other criterea used while storing.
+6) CleanUp the markers after the iterative AST is substituted.
+7) Generate actual JavaScript from the AST.
+
+*/
 module.exports={
  analyzeMapRootCode:function(code) {
     // 1
     console.log("Tool Module: Map Root Signatures");
-    //Simple tool which searches if there is recursive functions traversing the AST and lists them out: smanna Dec 2, 2017
+    //Simple tool which searches if there are functions traversing the AST and lists them out: smanna Dec 2, 2017
     var fs = require('fs'),
         esprima = require('esprima');
     var estraverse = require('estraverse');

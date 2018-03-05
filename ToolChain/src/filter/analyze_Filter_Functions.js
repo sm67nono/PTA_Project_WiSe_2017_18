@@ -1,7 +1,18 @@
+//Static Analysis Here : smanna Dec 8, 2017
+/*
+This module is responsible of Pattern Detection of filter function Declarations. The module carries out the following task:
+
+1) Detect a function Declaration and check if has the filter pattern.
+2) If detected add to to the dataStore the extracted Values.
+3) Manufacture from a template an iterative form of the current functional Pattern.
+4) Add it to the List.
+5) Substitute the values into the AST after checking for patterns if it matches parent signature and other criterea used while storing.
+6) CleanUp the markers after the iterative AST is substituted.
+7) Generate actual JavaScript from the AST.
+
+*/
 
 
-
-//Static Analysis calls Here : smanna Dec 8, 2017
 module.exports = {
   analyzeFilterFunctionCode:function(code) {
     console.log("Tool Module: Filter Function signatures");
@@ -148,9 +159,6 @@ module.exports = {
               });
 
 
-
-              //Case 2: Filter Function external
-
           }
        }
      });
@@ -158,20 +166,7 @@ module.exports = {
  }
 });
 console.log("DataStore Size",dataStore.length);
-/*for(var counterDstore=0;counterDstore<dataStore.length;counterDstore++)
-{
-  console.log("Body Section");
-  console.log(dataStore[counterDstore]["bodySection"]);
-  console.log("ReturnCondition");
-  console.log(dataStore[counterDstore]["returnCondition"]);
-  console.log("arrayOperatedOn");
-  console.log(dataStore[counterDstore]["arrayOperatedOn"]);
-  console.log("Arg VariableName");
-  console.log(dataStore[counterDstore]["argVariableName"]);
-  console.log("================");
-}*/
 
-//console.log(functionNames);
 //===================Substituting values into the template===========================
 
 var createItrFilterTemplate = fs.readFileSync("filter_frame.js", 'utf-8');
@@ -211,16 +206,14 @@ estraverse.traverse(filter_ast, {
     }
   });
 
-  //console.log(JSON.stringify(filter_ast,null,4));
-  //console.log("======================");
+
   var storageVariable={};
   storageVariable=filter_ast;
   templateStore.push(storageVariable);
-  //console.log(JSON.stringify(filter_ast,null,4));
-  //console.log("===============================");
+
 }
 
-//console.log(JSON.stringify(filter_ast,null,4));
+
 
 //Step 3: Replace the original AST having functional pattern
 
@@ -229,7 +222,7 @@ var getFromTemplateStore=0;
 //For function declarations
 estraverse.traverse(ast, {
     enter: function(node, parent){
-    //console.log(currentfunctionAST);
+
     //By default the contents are inside the Root Node. So Program is the currentFunction
 
     //Mark the current function whose body has to be changed
@@ -245,14 +238,12 @@ estraverse.traverse(ast, {
           functionBody=node.body.body;
         }
       }
-      //console.log(JSON.stringify(functionBody,null,4));
-      //console.log("===================================");
+
     for(var loopCount=0;loopCount<functionBody.length;loopCount++)
     {
       var checkNode=functionBody[loopCount];
       var nodeChanged=false;
-      //console.log(checkNode);
-      //console.log("==================");
+
       var checkNodeBody=null;
 
       //Important for positioning the Converted Code
@@ -373,8 +364,6 @@ estraverse.traverse(ast, {
             nodeChanged=false;
         }
 
-      //console.log(JSON.stringify(functionBody,null,4));
-      //console.log("==========");
     }
 
     //For Non Variable declarations
@@ -474,9 +463,6 @@ estraverse.traverse(ast, {
               if(dataStore[getFromTemplateStore]){
                 if(parent2==dataStore[getFromTemplateStore].parentSignature)
                 {
-                  //console.log(JSON.stringify(nodelvl2,null,4));
-                  //console.log("===============Parent====================");
-                  //console.log(JSON.stringify(parent2,null,4));
 
 
                   if(dataStore[getFromTemplateStore].arrayOperatedOn.type!="CallExpression" && parent2.type!="MemberExpression")
@@ -485,22 +471,12 @@ estraverse.traverse(ast, {
                                nodelvl2[key] = null;
                        }
 
-                    //console.log("===============Array Operated ON====================");
-                    //console.log(JSON.stringify(dataStore[getFromTemplateStore].arrayOperatedOn,null,4));
-                    //console.log(dataStore[getFromTemplateStore].arrayOperatedOn.type);
+
 
                     nodelvl2.type="Identifier";
                     nodelvl2.name="newArray";
 
-                    /*nodelvl2.type="ExpressionStatement";
-                    nodelvl2.expression={};
-                    nodelvl2.expression.type="AssignmentExpression";
-                    nodelvl2.expression.operator="=";
-                    nodelvl2.expression.left={};
-                    nodelvl2.expression.left=dataStore[getFromTemplateStore].arrayOperatedOn;
-                    nodelvl2.expression.right={};
-                    nodelvl2.expression.right.type="Identifier";
-                    nodelvl2.expression.right.name="newArray2";*/
+
 
                   for (var key in nodelvl2 ) {
                       if(nodelvl2[key] == null)
@@ -519,16 +495,6 @@ estraverse.traverse(ast, {
 
                 if(dataStore[getFromTemplateStore].arrayOperatedOn.type=="CallExpression" && parent2.type!="MemberExpression")
                 {
-
-
-                  //console.log("======Parent type=============");
-                  //console.log(parent2.type);
-                  //console.log(escodg.generate(parent2));
-                  //console.log("===============Array Operated CallExpression====================");
-                  //console.log(JSON.stringify(dataStore[getFromTemplateStore].arrayOperatedOn,null,4));
-                  //console.log(dataStore[getFromTemplateStore].arrayOperatedOn.type);
-
-
 
 
                   var copyValueArrayOperatedOn=JSON.parse(JSON.stringify(dataStore[getFromTemplateStore].arrayOperatedOn));
@@ -603,8 +569,7 @@ estraverse.traverse(ast, {
 
       }
 
-      //console.log(JSON.stringify(functionBody,null,4));
-      //console.log("==========");
+
     }
   }
 

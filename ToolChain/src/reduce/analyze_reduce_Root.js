@@ -1,6 +1,17 @@
+//Static Analysis  Here : smanna Dec 8, 2017
 
+/*
+This module is responsible of Pattern Detection of reduce in Program Root. The module carries out the following task:
 
-//Static Analysis calls Here : smanna Dec 8, 2017
+1) Detect the main Program Body for reduce patterns.
+2) If detected add to to the dataStore the extracted Values.
+3) Manufacture from a template an iterative form of the current functional Pattern.
+4) Add it to the List.
+5) Substitute the values into the AST after checking for patterns if it matches parent signature and other criterea used while storing.
+6) CleanUp the markers after the iterative AST is substituted.
+7) Generate actual JavaScript from the AST.
+
+*/
 module.exports={
  analyzeReduceRootCode:function(code) {
     // 1

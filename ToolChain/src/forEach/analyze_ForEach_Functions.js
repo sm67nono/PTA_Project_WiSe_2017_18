@@ -1,5 +1,17 @@
 
-//Static Analysis calls Here : smanna Dec 8, 2017
+//Static Analysis Here : smanna Dec 8, 2017
+/*
+This module is responsible of Pattern Detection of forEach function Declarations. The module carries out the following task:
+
+1) Detect a function Declaration and check if has the forEach pattern.
+2) If detected add to to the dataStore the extracted Values.
+3) Manufacture from a template an iterative form of the current functional Pattern.
+4) Add it to the List.
+5) Substitute the values into the AST after checking for patterns if it matches parent signature and other criterea used while storing.
+6) CleanUp the markers after the iterative AST is substituted.
+7) Generate actual JavaScript from the AST.
+
+*/
 module.exports = {
   analyzeForEachFunctionCode:function(code) {
     // 1
@@ -148,18 +160,6 @@ module.exports = {
 //console.log(dataStore.length);
 console.log("DataStore Length function Expressions",dataStore.length);
 
-/*for(var counterDstore=0;counterDstore<dataStore.length;counterDstore++)
-{
-  console.log("Body Section");
-  console.log(dataStore[counterDstore]["bodySection"]);
-  console.log("arrayOperatedOn");
-  console.log(dataStore[counterDstore]["arrayOperatedOn"]);
-  console.log("Arg VariableName");
-  console.log(dataStore[counterDstore]["argVariableName"]);
-  console.log("================");
-}*/
-
-//console.log(functionNames);
 //===================Substituting values into the template===========================
 
 var createItrFilterTemplate = fs.readFileSync("forEach_frame.js", 'utf-8');
@@ -194,16 +194,13 @@ estraverse.traverse(foreach_ast, {
   }
 });
 
-  //console.log(JSON.stringify(filter_ast,null,4));
-  //console.log("======================");
   var storageVariable={};
   storageVariable=foreach_ast;
   templateStore.push(storageVariable);
-  //console.log(JSON.stringify(filter_ast,null,4));
-  //console.log("===============================");
+
 }
 
-//console.log(JSON.stringify(filter_ast,null,4));
+
 
 //Step 3: Replace the original AST having functional pattern
 
@@ -212,7 +209,7 @@ var getFromTemplateStore=0;
 //For function declarations
 estraverse.traverse(ast, {
     enter: function(node, parent){
-    //console.log(currentfunctionAST);
+
     //By default the contents are inside the Root Node. So Program is the currentFunction
 
     //Mark the current function whose body has to be changed
@@ -548,9 +545,6 @@ estraverse.traverse(ast, {
   }
   });
 
-
-
-    //If the node is changed add the AST body before that
     //If the node is changed add the AST body before that
     if(nodeChanged)
     {

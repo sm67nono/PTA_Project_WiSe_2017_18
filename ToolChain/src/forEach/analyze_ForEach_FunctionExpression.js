@@ -1,10 +1,21 @@
+//Static Analysis Here : smanna Dec 8, 2017
+/*
+This module is responsible of Pattern Detection of forEach function expressions. The module carries out the following task:
 
-//Static Analysis calls Here : smanna Dec 8, 2017
+1) Detect a function expression and check if has the forEach pattern.
+2) If detected add to to the dataStore the extracted Values.
+3) Manufacture from a template an iterative form of the current functional Pattern.
+4) Add it to the List.
+5) Substitute the values into the AST after checking for patterns if it matches parent signature and other criterea used while storing.
+6) CleanUp the markers after the iterative AST is substituted.
+7) Generate actual JavaScript from the AST.
+
+*/
 module.exports = {
   analyzeForEachFunctionExpressionCode:function(code) {
     // 1
     console.log("Tool Module: ForEach Function Expression Signatures");
-    //Simple tool which searches if there is recursive functions traversing the AST and lists them out: smanna Dec 2, 2017
+    //Simple tool which searches if there are functions traversing the AST and lists them out: smanna Dec 2, 2017
     var fs = require('fs'),
         esprima = require('esprima');
     var estraverse = require('estraverse');
@@ -152,16 +163,7 @@ module.exports = {
 
 //console.log(dataStore.length);
 console.log("DataStore Length function Expressions",dataStore.length);
-/*for(var counterDstore=0;counterDstore<dataStore.length;counterDstore++)
-{
-  console.log("Body Section");
-  console.log(dataStore[counterDstore]["bodySection"]);
-  console.log("arrayOperatedOn");
-  console.log(dataStore[counterDstore]["arrayOperatedOn"]);
-  console.log("Arg VariableName");
-  console.log(dataStore[counterDstore]["argVariableName"]);
-  console.log("================");
-}*/
+
 
 //console.log(functionNames);
 //===================Substituting values into the template===========================
@@ -210,7 +212,7 @@ estraverse.traverse(foreach_ast, {
   //console.log("===============================");
 }
 
-//console.log(JSON.stringify(filter_ast,null,4));
+
 
 //Step 3: Replace the original AST having functional pattern
 

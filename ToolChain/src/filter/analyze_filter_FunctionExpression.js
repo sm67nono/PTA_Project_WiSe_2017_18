@@ -1,5 +1,17 @@
 
-//Static Analysis calls Here : smanna Dec 8, 2017
+//Static Analysis Here : smanna Dec 8, 2017
+/*
+This module is responsible of Pattern Detection of filter function expressions. The module carries out the following task:
+
+1) Detect a function expression and check if has the filter pattern.
+2) If detected add to to the dataStore the extracted Values.
+3) Manufacture from a template an iterative form of the current functional Pattern.
+4) Add it to the List.
+5) Substitute the values into the AST after checking for patterns if it matches parent signature and other criterea used while storing.
+6) CleanUp the markers after the iterative AST is substituted.
+7) Generate actual JavaScript from the AST.
+
+*/
 module.exports = {
   analyzeFilterFunctionExpressionCode:function(code) {
     // 1
@@ -23,11 +35,9 @@ module.exports = {
     var dataFormat={"parentSignature":parentSign,"bodySection":bodySection, "returnCondition":returnCondition, "arrayOperatedOn":arrayOperatedOn, "argVariableName":argVariableName};
 
 	 var ast = esprima.parse(code);
-	 //console.log("The AST is:");
-	 //console.log(JSON.stringify(ast,null,4));
+
    estraverse.traverse(ast, {
      enter: function(currentfunctionAST,parentMain){
-       //console.log(currentfunctionAST);
        //Extracting Filter functions
        //if (currentfunctionAST.type === 'FunctionDeclaration' || currentfunctionAST.type === 'FunctionExpression' || currentfunctionAST.type === 'Program')
        if (currentfunctionAST.type === 'FunctionExpression')
@@ -35,7 +45,6 @@ module.exports = {
          estraverse.traverse(currentfunctionAST, {
            enter: function(node,parentNode){
           var extractedParts=0;
-         //console.log(JSON.stringify(currentfunctionAST,null,4));
          var typeOfOp='';
          if(node.callee)
          {
@@ -58,9 +67,6 @@ module.exports = {
             argVariableName=null;
 
             console.log("Is using a  filter operation in Function");
-            //console.log(node);
-            //var argstreeAST=node;
-            //console.log(argstreeAST);
             if(node.callee.object)
             {
               arrayOperatedOn=node.callee.object;
@@ -157,27 +163,12 @@ module.exports = {
  }
 });
 console.log("DataStore Length function Expressions",dataStore.length);
-/*for(var counterDstore=0;counterDstore<dataStore.length;counterDstore++)
-{
-  console.log("Body Section");
-  console.log(dataStore[counterDstore]["bodySection"]);
-  console.log("ReturnCondition");
-  console.log(dataStore[counterDstore]["returnCondition"]);
-  console.log("arrayOperatedOn");
-  console.log(dataStore[counterDstore]["arrayOperatedOn"]);
-  console.log("Arg VariableName");
-  console.log(dataStore[counterDstore]["argVariableName"]);
-  console.log("================");
-}*/
 
-//console.log(functionNames);
 //===================Substituting values into the template===========================
 
 var createItrFilterTemplate = fs.readFileSync("filter_frame.js", 'utf-8');
 
 
-//console.log(JSON.stringify(filter_ast,null,4));
-//console.log("=================================");
 var templateStore=[];
 for(var getDataStoreCounter=0;getDataStoreCounter<dataStore.length;getDataStoreCounter++){
 var filter_ast = esprima.parse(createItrFilterTemplate);
@@ -231,7 +222,7 @@ var getFromTemplateStore=0;
 //For function declarations
 estraverse.traverse(ast, {
     enter: function(node, parent){
-    //console.log(currentfunctionAST);
+
     //By default the contents are inside the Root Node. So Program is the currentFunction
 
     //Mark the current function whose body has to be changed
@@ -249,15 +240,12 @@ estraverse.traverse(ast, {
           functionBody=node.body.body;
         }
       }
-      //console.log(JSON.stringify(functionBody,null,4));
+
     for(var loopCount=0;loopCount<functionBody.length;loopCount++)
     {
       var checkNode=functionBody[loopCount];
       var nodeChanged=false;
-      //console.log(checkNode);
-      //console.log("==================");
 
-      //console.log("==================");
       var checkNodeBody=null;
 
       //Important for positioning the Converted Code
@@ -283,7 +271,7 @@ estraverse.traverse(ast, {
             {
               if(nodelvl2.init.type=="CallExpression")
               {
-              //console.log(JSON.stringify(currentfunctionAST,null,4));
+
 
               var typeOfOp='';
               if(nodelvl2.init.callee)
@@ -326,8 +314,7 @@ estraverse.traverse(ast, {
             nodeChanged=false;
         }
 
-      //console.log(JSON.stringify(functionBody,null,4));
-      //console.log("==========");
+
     }
 
 
@@ -493,22 +480,12 @@ estraverse.traverse(ast, {
                   {
 
 
-                    //console.log("===============Array Operated ON====================");
-                    //console.log(JSON.stringify(dataStore[getFromTemplateStore].arrayOperatedOn,null,4));
-                    //console.log(dataStore[getFromTemplateStore].arrayOperatedOn.type);
+
                     for (var key in nodelvl2 ) {
                                nodelvl2[key] = null;
                        }
 
-                    /*nodelvl2.type="ExpressionStatement";
-                    nodelvl2.expression={};
-                    nodelvl2.expression.type="AssignmentExpression";
-                    nodelvl2.expression.operator="=";
-                    nodelvl2.expression.left={};
-                    nodelvl2.expression.left=dataStore[getFromTemplateStore].arrayOperatedOn;
-                    nodelvl2.expression.right={};
-                    nodelvl2.expression.right.type="Identifier";
-                    nodelvl2.expression.right.name="newArray";*/
+
 
                     nodelvl2.type="Identifier";
                     nodelvl2.name="newArray";
@@ -525,16 +502,7 @@ estraverse.traverse(ast, {
                 if(dataStore[getFromTemplateStore].arrayOperatedOn.type=="CallExpression")
                 {
 
-                  //console.log("===============Array Operated CallExpression====================");
-                  //console.log(JSON.stringify(dataStore[getFromTemplateStore].arrayOperatedOn,null,4));
-                  //console.log(dataStore[getFromTemplateStore].arrayOperatedOn.type);
 
-                  //var copyValueArrayOperatedOn=JSON.parse(JSON.stringify(dataStore[getFromTemplateStore].arrayOperatedOn));
-                  //copyValueArrayOperatedOn.arguments=[];
-                  //copyValueArrayOperatedOn.arguments[0]={ "type": "Identifier","name": "newArray" };
-                  //nodelvl2.type="ExpressionStatement";
-                  //nodelvl2.expression={};
-                  //nodelvl2.expression=copyValueArrayOperatedOn;
 
                   nodelvl2.type="Identifier";
                   nodelvl2.name="newArray";
@@ -556,10 +524,7 @@ estraverse.traverse(ast, {
 
 
          },
-        /*leave: function(nodeleave) {
-        console.log("===============Leaving Node====================");
-        console.log(JSON.stringify(nodeleave,null,4));
-      }*/
+
     });
 
 
@@ -569,8 +534,7 @@ estraverse.traverse(ast, {
       console.log("Here 2");
 
       if(checkNodeBody){
-        //console.log("===================================CheckNode Body");
-        //console.log(JSON.stringify(checkNodeBody,null,4));
+
 
 
       console.log("Here 2");
@@ -580,8 +544,7 @@ estraverse.traverse(ast, {
 
             for(var astBody=0;astBody<templateStore[getFromTemplateStore].body.length;astBody++)
               {
-                //console.log(JSON.stringify(templateStore[getFromTemplateStore].body[astBody],null,4));
-                //console.log("==========");
+
                 checkNodeBody.splice(loopCount,0, templateStore[getFromTemplateStore].body[astBody]);
               }
             getFromTemplateStore++;
@@ -594,8 +557,7 @@ estraverse.traverse(ast, {
         {
         for(var astBody=templateStore[getFromTemplateStore].body.length-1;astBody>=0;astBody--)
           {
-            //console.log(JSON.stringify(templateStore[getFromTemplateStore].body[astBody],null,4));
-            //console.log("==========");
+
             functionBody.splice(loopCount,0, templateStore[getFromTemplateStore].body[astBody]);
           }
           getFromTemplateStore++;
@@ -604,8 +566,7 @@ estraverse.traverse(ast, {
 
       }
 
-      //console.log(JSON.stringify(functionBody,null,4));
-      //console.log("==========");
+
     }
   }
 
@@ -684,17 +645,3 @@ return newCode;
 }
 
 };
-
-// 2
-/*if (process.argv.length < 3) {
-    console.log('Usage: analyze.js <filename>.js');
-    process.exit(1);
-}
-
-// 3
-var filename = process.argv[2];
-console.log('Reading ' + filename);
-var code = fs.readFileSync(filename, 'utf-8');
-
-analyzeCode(code);
-console.log('Done');*/
