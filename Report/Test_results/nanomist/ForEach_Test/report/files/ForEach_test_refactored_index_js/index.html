@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - ForEach_test\refactored\index.js</title>
+  <title>Plato - ForEach_Test\refactored\index.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -36,7 +36,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>ForEach_test\refactored\index.js</h1>
+    <h1>ForEach_Test\refactored\index.js</h1>
   </div>
 </div>
 
@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">55.21</p>
+      <p class="stat">53.18</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">271</p>
+      <p class="stat">274</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">117.85</p>
+      <p class="stat">120.86</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.95</p>
+      <p class="stat">3.02</p>
     </div>
   </div>
 </div>
@@ -101,9 +101,15 @@
     if (typeof opts[&#039;boolean&#039;] === &#039;boolean&#039; &amp;&amp; opts[&#039;boolean&#039;]) {
       flags.allBools = true;
     } else {
-      [].concat(opts[&#039;boolean&#039;]).filter(Boolean).forEach(function (key) {
-          flags.bools[key] = true;
-      });
+      ;
+        var arrayUsingItr = [].concat(opts[&#039;boolean&#039;]).filter(Boolean);
+        var newArray = [];
+        for (var i = 0, counter = 0; i &lt; arrayUsingItr.length; i++) {
+            var key = arrayUsingItr[i];
+            flags.bools[key] = true;
+            newArray[counter] = arrayUsingItr[i];
+            counter++;
+        }
     }
     
     var aliases = {};
@@ -116,11 +122,9 @@
         });
     });
 
-     var arrayUsingItr = [].concat(opts.string).filter(Boolean);
+    var arrayUsingItr = [].concat(opts.string).filter(Boolean);
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i &lt; arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i &lt; arrayUsingItr.length; i++) {
         var key = arrayUsingItr[i];
         flags.strings[key] = true;
         if (aliases[key]) {
@@ -129,21 +133,18 @@
         newArray[counter] = arrayUsingItr[i];
         counter++;
     }
-    //[].concat(opts.string).filter(newArray);
     ;
     var defaults = opts[&#039;default&#039;] || {};
     var argv = { _: [] };
     var arrayUsingItr = Object.keys(flags.bools);
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i &lt; arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i &lt; arrayUsingItr.length; i++) {
         var key = arrayUsingItr[i];
         setArg(key, defaults[key] === undefined ? false : defaults[key]);
         newArray[counter] = arrayUsingItr[i];
         counter++;
     }
-    //Object.keys(newArray);
+    ;
     
     var notFlags = [];
 
@@ -174,10 +175,17 @@
 
     function setKey (obj, keys, value) {
         var o = obj;
-        keys.slice(0,-1).forEach(function (key) {
-            if (o[key] === undefined) o[key] = {};
+        var arrayUsingItr = keys.slice(0, -1);
+        var newArray = [];
+        for (var i = 0, counter = 0; i &lt; arrayUsingItr.length; i++) {
+            var key = arrayUsingItr[i];
+            if (o[key] === undefined)
+                o[key] = {};
             o = o[key];
-        });
+            newArray[counter] = arrayUsingItr[i];
+            counter++;
+        }
+        ;
 
         var key = keys[keys.length - 1];
         if (o[key] === undefined || flags.bools[key] || typeof o[key] === &#039;boolean&#039;) {
@@ -299,11 +307,9 @@
         }
     }
     
-   var arrayUsingItr = Object.keys(defaults);
+    var arrayUsingItr = Object.keys(defaults);
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i &lt; arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i &lt; arrayUsingItr.length; i++) {
         var key = arrayUsingItr[i];
         if (!hasKey(argv, key.split(&#039;.&#039;))) {
             setKey(argv, key.split(&#039;.&#039;), defaults[key]);
@@ -314,20 +320,19 @@
         newArray[counter] = arrayUsingItr[i];
         counter++;
     }
-    Object.keys(newArray);
+    ;
     
     if (opts[&#039;--&#039;]) {
         argv[&#039;--&#039;] = new Array();
-        var arrayUsingItr = notFlags;
+		var arrayUsingItr = notFlags;
         var newArray = [];
-        var arg = null;
-        var counter = 0;
-        for (var i = 0; i &lt; arrayUsingItr.length; i++) {
+        for (var i = 0, counter = 0; i &lt; arrayUsingItr.length; i++) {
             var key = arrayUsingItr[i];
             argv[&#039;--&#039;].push(key);
             newArray[counter] = arrayUsingItr[i];
             counter++;
         }
+    ;
     }
     else {
         notFlags.forEach(function(key) {
@@ -342,15 +347,13 @@ function hasKey (obj, keys) {
     var o = obj;
     var arrayUsingItr = keys.slice(0, -1);
     var newArray = [];
-    var arg = null;
-    var counter = 0;
-    for (var i = 0; i &lt; arrayUsingItr.length; i++) {
+    for (var i = 0, counter = 0; i &lt; arrayUsingItr.length; i++) {
         var key = arrayUsingItr[i];
         o = o[key] || {};
         newArray[counter] = arrayUsingItr[i];
         counter++;
     }
-
+    ;
     var key = keys[keys.length - 1];
     return key in o;
 }
